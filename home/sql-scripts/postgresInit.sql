@@ -1,13 +1,14 @@
--- DROP schema IF EXISTS minicrmschema cascade ;
--- create schema minicrmschema;
--- set search_path to minicrmschema;
+set search_path to public;
 
+DROP TABLE IF EXISTS users_roles;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS employee;
 --
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS users cascade ;
-
+drop sequence if exists users_seq;
 CREATE SEQUENCE users_seq;
 
 CREATE TABLE users
@@ -44,8 +45,7 @@ VALUES ('andrey', '$2a$10$/K.WdZlnm6GJni3i2ahWiueIovcoUoTHMHIDYD.JzqDL7RcMG8Q.y'
 -- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS roles cascade ;
-
+drop sequence if exists roles_seq;
 CREATE SEQUENCE roles_seq;
 
 CREATE TABLE roles
@@ -70,8 +70,6 @@ VALUES ('ROLE_EMPLOYEE'),
 --
 -- Table structure for table `users_roles`
 --
-
-DROP TABLE IF EXISTS users_roles cascade ;
 
 CREATE TABLE users_roles
 (
@@ -107,8 +105,7 @@ VALUES (1, 1),
 -- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS employee cascade ;
-
+drop sequence if exists employee_seq;
 CREATE SEQUENCE employee_seq;
 
 CREATE TABLE employee

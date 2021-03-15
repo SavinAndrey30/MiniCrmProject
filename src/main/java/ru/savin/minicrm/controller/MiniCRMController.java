@@ -51,7 +51,7 @@ public class MiniCRMController {
                        @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
 
         if (multipartFile.getSize() == 0) {
-            bindingResult.rejectValue("photo", "error.employee", "load me please");
+            bindingResult.rejectValue("photo", "error.employee", "Please, load a photo");
         }
 
         if (bindingResult.hasErrors()) {
