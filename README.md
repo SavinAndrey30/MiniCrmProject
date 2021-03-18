@@ -15,17 +15,17 @@ Spring Boot, Spring Data JPA, Spring Security, JUnit, Postgresql (Docker image),
 ## Инструкции по запуску приложения
 - Инициализация БД:
 1. установить docker клиент
-2. развернуть образ с базой данных командой ```sh docker-compose up -d ``` из корня проекта
+2. развернуть образ с базой данных командой ``` docker-compose up -d ``` из корня проекта
 3. подключиться к БД любым клиентом, используя строку подключения: jdbc:postgresql://localhost:54320/postgres username/password: postgres
-4. создать БД для нужд проекта командой в клиенте: ```sh create database minicrm ```
-5. подключиться к БД minicrm клиентом по адресу jdbc:postgresql://localhost:54320/minicrm username/password: postgres и выполнить команды из скрипта ```sh home/sql-scripts/postgresInit.sql ``` 
-Можно также сразу создать БД для интеграционных тестов: ```sh create database minicrmtests ```. Скрипт инициализации выполнять не требуется.
+4. создать БД для нужд проекта командой в клиенте: ``` create database minicrm ```
+5. подключиться к БД minicrm клиентом по адресу jdbc:postgresql://localhost:54320/minicrm username/password: postgres и выполнить команды из скрипта ``` home/sql-scripts/postgresInit.sql ``` 
+Можно также сразу создать БД для интеграционных тестов: ``` create database minicrmtests ```. Скрипт инициализации выполнять не требуется.
 
 - Запуск приложения:  
-Если на локальной машине установлен Maven: ```sh mvnw spring-boot:run ```  
-Если на локальной машине не установлен Maven: ```sh mvn spring-boot:run ```
+Если на локальной машине установлен Maven: ``` mvnw spring-boot:run ```  
+Если на локальной машине не установлен Maven: ``` mvn spring-boot:run ```
 
-Приложение будет доступно по адресу ```sh http://localhost:8888 ```
+Приложение будет доступно по адресу ``` http://localhost:8888 ```
 
 - Данные для входа:  
 Admin: alena (пароль pass123)  
@@ -34,4 +34,4 @@ Employee: andrey (пароль pass123)
 
 ## Тестирование
 В проекте реализовано интеграционное тестирование (контроллер, логин система) и модульное тестирование (методы сервисов).  
-Команда для запуска тестов: ```sh mvn clean test ``` или ```sh mvnw clean test ```
+Команда для запуска тестов: ``` mvn clean test ``` или ``` mvnw clean test ```
