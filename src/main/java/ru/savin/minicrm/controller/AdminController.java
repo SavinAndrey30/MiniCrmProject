@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class AdminController {
 
-    private UserService userService;
+    private UserService userService; // todo non final field
 
     @Autowired
     public AdminController(UserService userService) {
@@ -24,7 +24,7 @@ public class AdminController {
 
     @GetMapping("")
     public String showCrmUsers(Model model) {
-        List<User> users = userService.findAll();
+        List<User> users = userService.findAll(); // todo inline
 
         model.addAttribute("users", users);
 

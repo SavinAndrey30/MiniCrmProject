@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/crm")
 public class MiniCRMController {
 
-    private EmployeeService employeeService;
+    private EmployeeService employeeService; // todo non final field (лучше поля делать финальными которые инициализируются в конструкторе)
 
     @Autowired
     public MiniCRMController(EmployeeService employeeService) {
@@ -48,7 +48,7 @@ public class MiniCRMController {
     @PostMapping("/save")
     public String save(@ModelAttribute("employee") @Valid Employee employee,
                        BindingResult bindingResult,
-                       @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+                       @RequestParam("fileImage") MultipartFile multipartFile) throws IOException { // todo мне кажется тут пробрасывать ошибку наверх - так себе решение, дальше только фронтенд и ошибка не будет корректно обработна
 
         if (multipartFile.getSize() == 0) {
             bindingResult.rejectValue("photo", "error.employee", "Please, load a photo");
@@ -59,7 +59,7 @@ public class MiniCRMController {
         }
 
         //StringUtils from springframework package
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename()); // todo лучше проверить на null multipartFile
         employee.setPhoto(fileName);
 
         employeeService.save(employee);
@@ -103,7 +103,7 @@ public class MiniCRMController {
         employeeService.delete(id);
 
         String uploadDir = uploadPath + "/" + id;
-        System.out.println(uploadDir);
+        System.out.println(uploadDir); // todo remove print
         Path uploadPath = Paths.get(uploadDir);
 
         //removing the folder with photo for deleted entity
@@ -128,7 +128,7 @@ public class MiniCRMController {
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir, Model model) {
+                                @RequestParam("sortDir") String sortDir, Model model) { // todo bad name for sortDir
         int pageSize = 5;
         Page<Employee> page = employeeService.findPaginated(pageNo, pageSize, sortField, sortDir);
         List<Employee> employees = page.getContent();

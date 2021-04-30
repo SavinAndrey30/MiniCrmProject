@@ -38,6 +38,7 @@ public class FormUser {
     @Size(min = 3, message = "is required")
     private String email;
 
+    // todo why it's empty?
     public FormUser() {
 
     }

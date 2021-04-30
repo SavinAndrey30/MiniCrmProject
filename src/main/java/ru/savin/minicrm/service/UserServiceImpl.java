@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(FormUser formUser) {
         User user = new User();
-
+        // todo вот такое это плохо
         user.setUserName(formUser.getUserName());
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
         user.setFirstName(formUser.getFirstName());
@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(formUser.getEmail());
 
         // give user default role of "employee"
+        // todo тут даже идея же подсказывает чего надо сделать
         user.setRoles(Arrays.asList(roleRepository.findRoleByName("ROLE_EMPLOYEE")));
 
         return userRepository.save(user);
@@ -68,13 +69,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUserName(userName); // todo Optional.orElseThrow
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password");
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+                mapRolesToAuthorities(user.getRoles())); // todo такой метод полезно иметь в классе User (что то вроде toSpringUser)
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {

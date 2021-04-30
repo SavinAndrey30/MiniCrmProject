@@ -4,6 +4,7 @@ public class EmployeeErrorResponse {
     private int status;
     private String message;
 
+    // todo not used constructor
     public EmployeeErrorResponse(int status, String message) {
         this.status = status;
         this.message = message;

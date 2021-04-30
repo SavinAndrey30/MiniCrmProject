@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class EmployeeExceptionHandler {
 
+	// todo они специально называются одинаково?
 	@ExceptionHandler
 	public ModelAndView handleException(EmployeeNotFoundException exc) {
 

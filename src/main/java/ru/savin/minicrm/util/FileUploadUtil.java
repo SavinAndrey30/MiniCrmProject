@@ -16,7 +16,7 @@ public class FileUploadUtil {
         Path path = Paths.get(uploadDir);
 
         if (!Files.exists(path)) {
-            Files.createDirectories(path);
+            Files.createDirectories(path); // todo здесь ошибка тоже может быть прокинута и не обработна,  в try catch почему-то обрабатываешь ошибку, в чем прикол?
         }
 
         try (InputStream inputStream = multipartFile.getInputStream()) {

@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest; // todo optimize imports
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -21,11 +20,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException {
+			throws IOException { // todo ошибку лучше не прокидывать тут, а обработать
 
 		String userName = authentication.getName();
 
-		User theUser = userService.findByUserName(userName);
+		User theUser = userService.findByUserName(userName); // todo списал откуда то? так себе идея добавлять the к имени объекта
 
 		HttpSession session = request.getSession();
 		session.setAttribute("user", theUser);

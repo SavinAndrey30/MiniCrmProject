@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
+import java.io.IOException; // todo лишние импорты
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;

@@ -26,10 +26,9 @@ public class RegistrationController {
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
-
+        // todo code style
         StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor); // todo inline
     }
 
     @GetMapping("/showRegistrationForm")
@@ -53,22 +52,26 @@ public class RegistrationController {
             return "/user/registration-form";
         }
 
-        User existingByUsername = userService.findByUserName(userName);
+        User existingByUsername = userService.findByUserName(userName); // todo change findByUserName to return Optional
         if (existingByUsername != null) {
             theModel.addAttribute("formUser", new FormUser());
             theModel.addAttribute("registrationError", "User name already exists.");
 
-            logger.warning("User with the name " + formUser.getUserName() + " already exists.");
+            logger.warning("User with the name " + formUser.getUserName() + " already exists."); // todo warning for why?
             return "/user/registration-form";
         }
 
-        User existingByEmail = userService.findByEmail(formUser.getEmail());
+        User existingByEmail = userService.findByEmail(formUser.getEmail()); // todo change findByEmail to return Optional
         if (existingByEmail != null) {
             theModel.addAttribute("registrationErrorEmail", "User with the email " + formUser.getEmail() + " already exists.");
 
-            logger.warning("User with the email " + formUser.getEmail() + " already exists.");
+            logger.warning("User with the email " + formUser.getEmail() + " already exists."); // todo warning for why?
             return "/user/registration-form";
         }
+        // todo все проверки лучше вынести в другой класс и каждую проверку в отдельный метод.
+        // затем сделать метод который проводит все проверки и возвращает результат, а в контроллере этот результат
+        // конвертировать в нужную страничку
+
 
         userService.save(formUser);
 

@@ -9,7 +9,7 @@ public interface EmployeeService {
 
     List<Employee> findAll();
 
-    Employee findById(Long theId);
+    Employee findById(Long theId); // todo методам find лучше возвращать Optional
 
     Employee save(Employee theEmployee);
 

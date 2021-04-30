@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-//    List<Employee> findAllByOrderByLastName();
+//    List<Employee> findAllByOrderByLastName(); // todo remove or uncomment
 
     // search by name
     List<Employee> findByFirstNameContainsOrLastNameContainsAllIgnoreCase(String name, String lName);
