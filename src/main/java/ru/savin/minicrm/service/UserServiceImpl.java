@@ -65,12 +65,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
-        return user.toSpringUser(user, mapRolesToAuthorities(user.getRoles()));
+        return user.toSpringUser();
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
+
 
     public void setUserParams(FormUser formUser, User user) {
         user.setUserName(formUser.getUserName());
