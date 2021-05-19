@@ -30,55 +30,39 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee findById(Long theId) {
-        Optional<Employee> result = employeeRepository.findById(theId);
-        Employee theEmployee = null;
+    public Optional<Employee> findById(Long id) {
+        return employeeRepository.findById(id);
+    }
 
-        if (result.isPresent()) {
-            theEmployee = result.get();
+    @Override
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void delete(Long id) {
+        employeeRepository
+                .findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with the id " + id + " is not found"));
+
+        employeeRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Employee> searchBy(String keyword) {
+        if (keyword != null && keyword.trim().length() > 0) {
+            return employeeRepository.findByFirstNameOrLastName(keyword);
         } else {
-            throw new EmployeeNotFoundException("Employee with the id " + theId + " is not found");
+            return findAll();
         }
-
-        return theEmployee;
-    }
-
-    @Override
-    public Employee save(Employee theEmployee) {
-        return employeeRepository.save(theEmployee);
-    }
-
-    @Override
-    public void delete(Long theId) {
-
-        Optional<Employee> result = employeeRepository.findById(theId);
-
-        if (result.isEmpty()) {
-            throw new EmployeeNotFoundException("Employee with the id " + theId + " is not found");
-        }
-
-        employeeRepository.deleteById(theId);
-    }
-
-    @Override
-    public List<Employee> searchBy(String theName) {
-
-        List<Employee> results = null;
-
-        if (theName != null && theName.trim().length() > 0) {
-            results = employeeRepository.findByFirstNameContainsOrLastNameContainsAllIgnoreCase(theName, theName);
-        } else {
-            results = findAll();
-        }
-
-        return results;
     }
 
     @Override
     public Page<Employee> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        int pageNumberZeroBased = pageNo - 1;
+        Pageable pageable = PageRequest.of(pageNumberZeroBased , pageSize, sort);
         return employeeRepository.findAll(pageable);
     }
 }

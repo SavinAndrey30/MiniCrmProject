@@ -4,14 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
@@ -22,12 +15,12 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {
-        Path uploadDir = Paths.get(dirName);
-        String uploadPath = uploadDir.toFile().getAbsolutePath();
+        Path uploadDir = Path.of(dirName);
+        String uploadURI = uploadDir.toFile().toURI().toString();
 
         if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
 
-        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
+        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations(uploadURI + "/");
     }
 }
 

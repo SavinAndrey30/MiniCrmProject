@@ -4,14 +4,6 @@ public class EmployeeErrorResponse {
     private int status;
     private String message;
 
-    public EmployeeErrorResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
-
-    public EmployeeErrorResponse() {
-    }
-
     public int getStatus() {
         return status;
     }

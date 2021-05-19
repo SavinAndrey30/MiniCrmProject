@@ -127,10 +127,10 @@ ALTER SEQUENCE employee_seq RESTART WITH 1;
 --
 
 INSERT INTO employee (first_name, last_name, email, photo)
-VALUES ('Andrey', 'Savin', 'savin@gmail.com', 'Savin-photo.jpg'),
-       ('Emma', 'Baumgarten', 'emma@gmail.com', 'Savin-photo.jpg'),
-       ('Avani', 'Gupta', 'avani@gmail.com', 'Savin-photo.jpg'),
-       ('Yuri', 'Petrov', 'yuri@gmail.com', 'Savin-photo.jpg'),
-       ('Juan', 'Vega', 'juan@gmail.com', 'Savin-photo.jpg'),
-       ('Andre', 'Vega', 'andre@gmail.com', 'Savin-photo.jpg'),
-       ('Sergey', 'Vega', 'sergey@gmail.com', 'Savin-photo.jpg');
+VALUES ('Andrey', 'Savin', 'savin@gmail.com', 'photo1.jpg'),
+       ('Emma', 'Baumgarten', 'emma@gmail.com', 'photo2.jpg'),
+       ('Avani', 'Gupta', 'avani@gmail.com', 'photo3.jpg'),
+       ('Yuri', 'Petrov', 'yuri@gmail.com', 'photo4.jpg'),
+       ('Juan', 'Vega', 'juan@gmail.com', 'photo5.jpg'),
+       ('Andre', 'Vega', 'andre@gmail.com', 'photo6.jpg'),
+       ('Sergey', 'Vega', 'sergey@gmail.com', 'photo7.jpg');

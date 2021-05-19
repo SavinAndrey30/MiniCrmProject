@@ -6,16 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
 public class AdminController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public AdminController(UserService userService) {
@@ -24,9 +21,8 @@ public class AdminController {
 
     @GetMapping("")
     public String showCrmUsers(Model model) {
-        List<User> users = userService.findAll();
 
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.findAll());
 
         return "/user/list-users";
     }

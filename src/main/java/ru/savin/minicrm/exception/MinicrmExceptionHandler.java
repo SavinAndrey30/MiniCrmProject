@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
-public class EmployeeExceptionHandler {
+public class MinicrmExceptionHandler {
 
 	@ExceptionHandler
-	public ModelAndView handleException(EmployeeNotFoundException exc) {
+	public ModelAndView handleEmployeeException(EmployeeNotFoundException exc) {
 
 		EmployeeErrorResponse error = new EmployeeErrorResponse();
 
@@ -20,14 +20,7 @@ public class EmployeeExceptionHandler {
 	}
 
 	@ExceptionHandler
-	public ModelAndView handleException(Exception exc) {
-
-		EmployeeErrorResponse error = new EmployeeErrorResponse();
-
-		error.setStatus(HttpStatus.BAD_REQUEST.value());
-		error.setMessage(exc.getMessage());
-
-		return new ModelAndView("error/exception", "exceptionMsg", "Details: " + error.getMessage());
+	public ModelAndView handleGlobalException(Exception exc) {
+		return new ModelAndView("error/global-exception");
 	}
-	
 }

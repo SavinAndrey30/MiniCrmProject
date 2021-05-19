@@ -1,6 +1,10 @@
 package ru.savin.minicrm.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -45,6 +49,12 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.roles = roles;
+	}
+
+	public UserDetails toSpringUser(User user, Collection<? extends GrantedAuthority> authorities) {
+		return new org.springframework.security.core.userdetails.User(user.getUserName(),
+				user.getPassword(),
+				authorities);
 	}
 
 	public Long getId() {

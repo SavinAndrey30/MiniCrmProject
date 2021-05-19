@@ -12,20 +12,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.savin.minicrm.entity.Employee;
+import ru.savin.minicrm.exception.EmployeeNotFoundException;
 import ru.savin.minicrm.service.EmployeeService;
 import ru.savin.minicrm.util.FileUploadUtil;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/crm")
 public class MiniCRMController {
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     @Autowired
     public MiniCRMController(EmployeeService employeeService) {
@@ -50,8 +51,11 @@ public class MiniCRMController {
                        BindingResult bindingResult,
                        @RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
 
-        if (multipartFile.getSize() == 0) {
-            bindingResult.rejectValue("photo", "error.employee", "Please, load a photo");
+        String originalFilename = multipartFile.getOriginalFilename();
+
+        if (multipartFile.getSize() == 0 || originalFilename == null) {
+            bindingResult.rejectValue("photo", "error.employee", "Please, load a photo with the correct size and " +
+                    "filename");
         }
 
         if (bindingResult.hasErrors()) {
@@ -59,7 +63,7 @@ public class MiniCRMController {
         }
 
         //StringUtils from springframework package
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(originalFilename);
         employee.setPhoto(fileName);
 
         employeeService.save(employee);
@@ -73,15 +77,20 @@ public class MiniCRMController {
 
     @GetMapping("/showFormForUpdate")
     public String showFormForUpdate(Model model, @RequestParam("id") Long id) {
-        model.addAttribute("employee", employeeService.findById(id));
+        Employee employee =
+                employeeService.findById(id)
+                        .orElseThrow(() -> new EmployeeNotFoundException("Employee with the id " + id + " is not " +
+                                "found"));
+
+        model.addAttribute("employee", employee);
         return "/employee/update-employee-form";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute("employee") @Valid Employee employee,
                          BindingResult bindingResult) {
-        Employee dbEmployee = employeeService.findById(employee.getId());
-        employee.setPhoto(dbEmployee.getPhoto());
+        Optional<Employee> dbEmployee = employeeService.findById(employee.getId());
+        dbEmployee.ifPresent(value -> employee.setPhoto(value.getPhoto()));
 
         if (bindingResult.hasErrors()) {
             return "/employee/update-employee-form";
@@ -94,7 +103,11 @@ public class MiniCRMController {
 
     @GetMapping("/showEmployeeDetails")
     public String showEmployeeDetails(Model model, @RequestParam("id") Long id) {
-        model.addAttribute("employee", employeeService.findById(id));
+        Employee employee =
+                employeeService.findById(id)
+                        .orElseThrow(() -> new EmployeeNotFoundException("Employee with the id " + id + " is not " +
+                                "found"));
+        model.addAttribute("employee", employee);
         return "/employee/employee-details";
     }
 
@@ -103,8 +116,7 @@ public class MiniCRMController {
         employeeService.delete(id);
 
         String uploadDir = uploadPath + "/" + id;
-        System.out.println(uploadDir);
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Path.of(uploadDir);
 
         //removing the folder with photo for deleted entity
         try {
@@ -128,18 +140,19 @@ public class MiniCRMController {
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable("pageNo") int pageNo,
                                 @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir, Model model) {
+                                @RequestParam("sortDirection") String sortDirection, Model model) {
         int pageSize = 5;
-        Page<Employee> page = employeeService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        Page<Employee> page = employeeService.findPaginated(pageNo, pageSize, sortField, sortDirection);
+
         List<Employee> employees = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
 
-        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("sortField", sortField);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("employees", employees);
 

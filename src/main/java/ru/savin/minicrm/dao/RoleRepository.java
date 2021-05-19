@@ -6,5 +6,5 @@ import ru.savin.minicrm.entity.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    Role findRoleByName(String theRoleName);
+    Role findRoleByName(String roleName);
 }

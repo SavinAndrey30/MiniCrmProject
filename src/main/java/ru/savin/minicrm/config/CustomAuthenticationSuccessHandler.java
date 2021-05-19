@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,10 +24,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 		String userName = authentication.getName();
 
-		User theUser = userService.findByUserName(userName);
+		User user = userService.findByUserName(userName).get();
 
 		HttpSession session = request.getSession();
-		session.setAttribute("user", theUser);
+		session.setAttribute("user", user);
 		session.setMaxInactiveInterval(3600);
 
 		response.sendRedirect(request.getContextPath() + "/");
