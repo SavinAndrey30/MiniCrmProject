@@ -62,10 +62,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(userName)
+        return userRepository.findByUserName(userName)
+                .map(User::toSpringUser)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
-
-        return user.toSpringUser();
     }
 
 

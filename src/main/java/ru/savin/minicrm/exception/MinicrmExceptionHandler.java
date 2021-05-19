@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class MinicrmExceptionHandler {
 
-	// todo они специально называются одинаково?
 	@ExceptionHandler
 	public ModelAndView handleEmployeeException(EmployeeNotFoundException exc) {
 
