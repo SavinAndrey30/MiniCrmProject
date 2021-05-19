@@ -18,7 +18,7 @@ Spring Boot, Spring Data JPA, Spring Security, JUnit, Postgresql (Docker image),
 2. развернуть образ с базой данных командой ``` docker-compose up -d ``` из корня проекта
 3. подключиться к БД любым клиентом, используя строку подключения: jdbc:postgresql://localhost:54320/postgres username/password: postgres
 4. создать БД для нужд проекта командой в клиенте: ``` create database minicrm ```
-5. подключиться к БД minicrm клиентом по адресу jdbc:postgresql://localhost:54320/minicrm username/password: postgres и выполнить команды из скрипта ``` home/sql-scripts/postgresInit.sql ``` 
+5. подключиться к БД minicrm клиентом по адресу jdbc:postgresql://localhost:54320/minicrm username/password: postgres и выполнить команды из скрипта ``` home/sql-scripts/postgres_init.sql ``` 
 Можно также сразу создать БД для интеграционных тестов: ``` create database minicrmtests ```. Скрипт инициализации выполнять не требуется.
 
 - Запуск приложения:  

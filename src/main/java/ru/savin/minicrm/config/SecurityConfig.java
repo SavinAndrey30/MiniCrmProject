@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception { // todo remove throws Exception
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customAuthenticationSuccessHandler)
                 .permitAll()
                 .and()
-                .logout() // todo add line endings
+                .logout()
                 .permitAll()
                 .and()
                 .exceptionHandling()

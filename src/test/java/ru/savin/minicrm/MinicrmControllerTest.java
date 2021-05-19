@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/create-employee-list-after.sql", "/create-user-after.sql"}, executionPhase =
         Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class MiniCRMControllerTest {
+public class MinicrmControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

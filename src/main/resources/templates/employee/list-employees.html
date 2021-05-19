@@ -52,15 +52,17 @@
         <tr>
             <th>
                 <a
-                        th:href="@{'/crm/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">First
+                        th:href="@{'/crm/page/' + ${currentPage} + '?sortField=firstName&sortDirection=' + ${reverseSortDirection}}">First
                     Name</a>
             </th>
             <th>
-                <a th:href="@{'/crm/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">Last
+                <a
+                        th:href="@{'/crm/page/' + ${currentPage} + '?sortField=lastName&sortDirection=' + ${reverseSortDirection}}">Last
                     Name</a>
             </th>
             <th>
-                <a th:href="@{'/crm/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">Email
+                <a
+                        th:href="@{'/crm/page/' + ${currentPage} + '?sortField=email&sortDirection=' + ${reverseSortDirection}}">Email
                 </a>
             </th>
             <th>Action</th>
@@ -112,19 +114,19 @@
             <div class="col-sm-3">
 					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
 						<a th:if="${currentPage != i}"
-                           th:href="@{'/crm/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                           th:href="@{'/crm/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">[[${i}]]</a>
 						<span th:unless="${currentPage != i}">[[${i}]]</span>
 					</span>
             </div>
             <div class="col-sm-1">
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/crm/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                   th:href="@{'/crm/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">Next</a>
                 <span th:unless="${currentPage < totalPages}">Next</span>
             </div>
 
             <div class="col-sm-1">
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/crm/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+                   th:href="@{'/crm/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDirection=' + ${sortDirection}}">
                     Last</a>
                 <span th:unless="${currentPage < totalPages}">Last</span>
             </div>

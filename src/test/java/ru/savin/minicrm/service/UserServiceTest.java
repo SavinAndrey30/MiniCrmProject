@@ -17,6 +17,7 @@ import ru.savin.minicrm.model.UserTestUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,24 +50,28 @@ class UserServiceTest {
 
     @Test
     void findByUserName() {
-        User actualUser = UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, EMAIL,
-                ROLES);
+        Optional<User> actualUser = Optional.of(UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD,
+                FIRST_NAME, LAST_NAME,
+                EMAIL,
+                ROLES));
 
         doReturn(actualUser).when(userRepository).findByUserName(USER_NAME);
 
-        User expectedUser = userService.findByUserName(USER_NAME);
+        Optional<User> expectedUser = userService.findByUserName(USER_NAME);
 
         assertThat(expectedUser).isEqualTo(actualUser);
     }
 
     @Test
     void findByEmail() {
-        User actualUser = UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, EMAIL,
-                ROLES);
+        Optional<User> actualUser = Optional.of(UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD,
+                FIRST_NAME, LAST_NAME,
+                EMAIL,
+                ROLES));
 
         doReturn(actualUser).when(userRepository).findByEmail(EMAIL);
 
-        User expectedUser = userService.findByEmail(EMAIL);
+        Optional<User> expectedUser = userService.findByEmail(EMAIL);
 
         assertThat(expectedUser).isEqualTo(actualUser);
     }

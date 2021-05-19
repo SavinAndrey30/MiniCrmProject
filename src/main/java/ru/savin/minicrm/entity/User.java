@@ -1,7 +1,13 @@
 package ru.savin.minicrm.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -45,6 +51,16 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.roles = roles;
+	}
+
+	public UserDetails toSpringUser() {
+		return new org.springframework.security.core.userdetails.User(getUserName(),
+				getPassword(),
+				mapRolesToAuthorities(roles));
+	}
+
+	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
 
 	public Long getId() {

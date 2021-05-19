@@ -4,18 +4,19 @@ import org.springframework.data.domain.Page;
 import ru.savin.minicrm.entity.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
     List<Employee> findAll();
 
-    Employee findById(Long theId); // todo методам find лучше возвращать Optional
+    Optional<Employee> findById(Long id);
 
-    Employee save(Employee theEmployee);
+    Employee save(Employee employee);
 
-    void delete(Long theId);
+    void delete(Long id);
 
-    List<Employee> searchBy(String theName);
+    List<Employee> searchBy(String keyword);
 
     Page<Employee> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 

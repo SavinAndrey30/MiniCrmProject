@@ -4,7 +4,6 @@ import ru.savin.minicrm.validation.FieldMatch;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -37,11 +36,6 @@ public class FormUser {
     @NotBlank(message = "is required")
     @Size(min = 3, message = "is required")
     private String email;
-
-    // todo why it's empty?
-    public FormUser() {
-
-    }
 
     public String getUserName() {
         return userName;

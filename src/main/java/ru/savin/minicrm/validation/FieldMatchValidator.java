@@ -25,9 +25,9 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             final Object firstObj = new BeanWrapperImpl(value).getPropertyValue(firstFieldName);
             final Object secondObj = new BeanWrapperImpl(value).getPropertyValue(secondFieldName);
 
-            valid = firstObj == null && secondObj == null || firstObj != null && firstObj.equals(secondObj); // todo ох тут без скобок сложно сообразить как вычиляться будет это выражение, тут и/или есть
+            valid = (firstObj == null && secondObj == null) || (firstObj != null && firstObj.equals(secondObj));
         } catch (final Exception ignore) {
-            // we can ignore
+
         }
 
         if (!valid) {

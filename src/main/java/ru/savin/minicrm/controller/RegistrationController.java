@@ -8,8 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.savin.minicrm.dto.FormUser;
-import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
+import ru.savin.minicrm.util.RegistrationFormHandler;
 
 import javax.validation.Valid;
 import java.util.logging.Logger;
@@ -26,9 +26,7 @@ public class RegistrationController {
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
-        // todo code style
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor); // todo inline
+        dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
     @GetMapping("/showRegistrationForm")
@@ -42,36 +40,15 @@ public class RegistrationController {
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(
             @Valid @ModelAttribute("formUser") FormUser formUser,
-            BindingResult theBindingResult,
-            Model theModel) {
+            BindingResult bindingResult,
+            Model model) {
 
         String userName = formUser.getUserName();
         logger.info("Processing registration form for: " + userName);
 
-        if (theBindingResult.hasErrors()) {
+        if (RegistrationFormHandler.userExists(bindingResult, userService, formUser, model)) {
             return "/user/registration-form";
         }
-
-        User existingByUsername = userService.findByUserName(userName); // todo change findByUserName to return Optional
-        if (existingByUsername != null) {
-            theModel.addAttribute("formUser", new FormUser());
-            theModel.addAttribute("registrationError", "User name already exists.");
-
-            logger.warning("User with the name " + formUser.getUserName() + " already exists."); // todo warning for why?
-            return "/user/registration-form";
-        }
-
-        User existingByEmail = userService.findByEmail(formUser.getEmail()); // todo change findByEmail to return Optional
-        if (existingByEmail != null) {
-            theModel.addAttribute("registrationErrorEmail", "User with the email " + formUser.getEmail() + " already exists.");
-
-            logger.warning("User with the email " + formUser.getEmail() + " already exists."); // todo warning for why?
-            return "/user/registration-form";
-        }
-        // todo все проверки лучше вынести в другой класс и каждую проверку в отдельный метод.
-        // затем сделать метод который проводит все проверки и возвращает результат, а в контроллере этот результат
-        // конвертировать в нужную страничку
-
 
         userService.save(formUser);
 
