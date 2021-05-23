@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> searchBy(String keyword) {
         if (keyword != null && keyword.trim().length() > 0) {
-            return employeeRepository.findByFirstNameOrLastName(keyword);
+            return EmployeeServiceImpl.findByFirstNameOrLastNameUtil(employeeRepository, keyword);
         } else {
             return findAll();
         }
@@ -62,7 +62,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         int pageNumberZeroBased = pageNo - 1;
-        Pageable pageable = PageRequest.of(pageNumberZeroBased , pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNumberZeroBased, pageSize, sort);
         return employeeRepository.findAll(pageable);
+    }
+
+    public static List<Employee> findByFirstNameOrLastNameUtil(EmployeeRepository employeeRepository, String keyword) {
+        return employeeRepository.findByFirstNameContainsOrLastNameContainsAllIgnoreCase(keyword, keyword);
     }
 }

@@ -4,6 +4,7 @@ package ru.savin.minicrm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileSystemUtils;
@@ -20,13 +21,15 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/crm")
 public class MiniCRMController {
 
     private final EmployeeService employeeService;
+
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Autowired
     public MiniCRMController(EmployeeService employeeService) {
@@ -79,8 +82,12 @@ public class MiniCRMController {
     public String showFormForUpdate(Model model, @RequestParam("id") Long id) {
         Employee employee =
                 employeeService.findById(id)
-                        .orElseThrow(() -> new EmployeeNotFoundException("Employee with the id " + id + " is not " +
-                                "found"));
+                        .orElseThrow(() -> {
+                            logger.info("/showFormForUpdate: Employee with the id " + id + " is not " +
+                                    "found");
+                            return new EmployeeNotFoundException("Employee with the id " + id + " is not " +
+                                    "found");
+                        });
 
         model.addAttribute("employee", employee);
         return "/employee/update-employee-form";
@@ -89,12 +96,27 @@ public class MiniCRMController {
     @PostMapping("/update")
     public String update(@ModelAttribute("employee") @Valid Employee employee,
                          BindingResult bindingResult) {
-        Optional<Employee> dbEmployee = employeeService.findById(employee.getId());
-        dbEmployee.ifPresent(value -> employee.setPhoto(value.getPhoto()));
-
         if (bindingResult.hasErrors()) {
             return "/employee/update-employee-form";
         }
+
+        Long id = employee.getId();
+        employeeService.findById(id)
+                .map(dbEmployee -> {
+                    employee.setPhoto(dbEmployee.getPhoto());
+                    return employee;
+                })
+                .map(employeeService::save)
+                .map(value -> "redirect:/crm")
+                .orElseThrow(() -> {
+                    logger.info("/update: Employee with the id " + id + " is not " +
+                            "found");
+                    return new EmployeeNotFoundException("Employee with the id " + id + " is not " +
+                            "found");
+                });
+
+//        Optional<Employee> dbEmployee = employeeService.findById(employee.getId());
+//        dbEmployee.ifPresent(value -> employee.setPhoto(value.getPhoto()));
 
         employeeService.save(employee);
 
@@ -105,8 +127,12 @@ public class MiniCRMController {
     public String showEmployeeDetails(Model model, @RequestParam("id") Long id) {
         Employee employee =
                 employeeService.findById(id)
-                        .orElseThrow(() -> new EmployeeNotFoundException("Employee with the id " + id + " is not " +
-                                "found"));
+                        .orElseThrow(() -> {
+                            logger.info("/showEmployeeDetails: Employee with the id " + id + " is not " +
+                                    "found");
+                            return new EmployeeNotFoundException("Employee with the id " + id + " is not " +
+                                    "found");
+                        });
         model.addAttribute("employee", employee);
         return "/employee/employee-details";
     }
@@ -122,7 +148,7 @@ public class MiniCRMController {
         try {
             FileSystemUtils.deleteRecursively(uploadPath);
         } catch (IOException ignored) {
-
+            logger.warning("couldn't remove the folder with photo for deleted employee with the id " + id);
         }
 
         return "redirect:/crm";
@@ -152,7 +178,8 @@ public class MiniCRMController {
 
         model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("sortField", sortField);
-        model.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
+        model.addAttribute("reverseSortDirection", sortDirection.equals(Sort.Direction.ASC.name()) ?
+                Sort.Direction.DESC.name() : Sort.Direction.ASC.name());
 
         model.addAttribute("employees", employees);
 

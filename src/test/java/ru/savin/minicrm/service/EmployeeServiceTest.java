@@ -105,7 +105,8 @@ class EmployeeServiceTest {
     void searchBy() {
         employeeService.searchBy(NAME_FOR_SEARCH);
 
-        verify(employeeRepository, times(1)).findByFirstNameOrLastName(NAME_FOR_SEARCH);
+        verify(employeeRepository, times(1)).findByFirstNameContainsOrLastNameContainsAllIgnoreCase(NAME_FOR_SEARCH,
+                NAME_FOR_SEARCH);
         verifyNoMoreInteractions(employeeRepository);
     }
 

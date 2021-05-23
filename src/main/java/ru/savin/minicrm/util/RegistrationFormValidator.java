@@ -7,9 +7,12 @@ import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 
-public class RegistrationFormHandler {
+public class RegistrationFormValidator {
+
+    private static final Logger logger = Logger.getLogger(RegistrationFormValidator.class.getName());
 
     public static boolean userExists(BindingResult bindingResult, UserService userService, FormUser formUser,
                                      Model model) {
@@ -21,24 +24,28 @@ public class RegistrationFormHandler {
     }
 
     public static boolean usernameExists(UserService userService, FormUser formUser, Model model) {
-        Optional<User> existingByUsername = userService.findByUserName(formUser.getUserName());
+        String userName = formUser.getUserName();
+        Optional<User> existingByUsername = userService.findByUserName(userName);
         if (existingByUsername.isPresent()) {
             model.addAttribute("formUser", new FormUser());
             model.addAttribute("registrationError", "User name already exists.");
 
             return true;
         }
+        logger.info("User with the name " + userName + " already exists.");
         return false;
     }
 
     public static boolean emailExists(UserService userService, FormUser formUser, Model model) {
-        Optional<User> existingByEmail = userService.findByEmail(formUser.getEmail());
+        String email = formUser.getEmail();
+        Optional<User> existingByEmail = userService.findByEmail(email);
         if (existingByEmail.isPresent()) {
-            model.addAttribute("registrationErrorEmail", "User with the email " + formUser.getEmail() + " already " +
+            model.addAttribute("registrationErrorEmail", "User with the email " + email + " already " +
                     "exists.");
 
             return true;
         }
+        logger.info("User with the email " + email + " already exists.");
         return false;
     }
 

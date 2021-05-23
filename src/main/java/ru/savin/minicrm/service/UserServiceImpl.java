@@ -1,8 +1,6 @@
 package ru.savin.minicrm.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,14 +8,11 @@ import org.springframework.stereotype.Service;
 import ru.savin.minicrm.dao.RoleRepository;
 import ru.savin.minicrm.dao.UserRepository;
 import ru.savin.minicrm.dto.FormUser;
-import ru.savin.minicrm.entity.Role;
 import ru.savin.minicrm.entity.User;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -62,10 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(userName)
+        return userRepository.findByUserName(userName)
+                .map(User::toSpringUser)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
-
-        return user.toSpringUser();
     }
 
 

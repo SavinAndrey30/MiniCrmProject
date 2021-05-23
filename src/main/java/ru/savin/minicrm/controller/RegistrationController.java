@@ -9,7 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.savin.minicrm.dto.FormUser;
 import ru.savin.minicrm.service.UserService;
-import ru.savin.minicrm.util.RegistrationFormHandler;
+import ru.savin.minicrm.util.RegistrationFormValidator;
 
 import javax.validation.Valid;
 import java.util.logging.Logger;
@@ -46,7 +46,7 @@ public class RegistrationController {
         String userName = formUser.getUserName();
         logger.info("Processing registration form for: " + userName);
 
-        if (RegistrationFormHandler.userExists(bindingResult, userService, formUser, model)) {
+        if (RegistrationFormValidator.userExists(bindingResult, userService, formUser, model)) {
             return "/user/registration-form";
         }
 
