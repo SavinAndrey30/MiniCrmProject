@@ -32,11 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -44,6 +39,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
+
+    @Override
+    public boolean existsByUserName(String userName) {
+        return userRepository.existsUserByUserName(userName);
     }
 
     @Override

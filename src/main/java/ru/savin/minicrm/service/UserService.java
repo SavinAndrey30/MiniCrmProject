@@ -11,12 +11,13 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findByUserName(String userName);
 
-    Optional<User> findByEmail(String email);
-
     User save(FormUser formUser);
 
     List<User> findAll();
 
     void delete(Long id);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByUserName(String userName);
 }

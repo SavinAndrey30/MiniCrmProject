@@ -1,5 +1,6 @@
 package ru.savin.minicrm.service;
 
+import junit.framework.Assert;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import ru.savin.minicrm.entity.Role;
 import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.model.UserTestUtil;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ class UserServiceTest {
     private static final String FIRST_NAME = "Andrey";
     private static final String LAST_NAME = "Savin";
     private static final String EMAIL = "sava@mail.ru";
-    private static final List<Role> ROLES = Arrays.asList(new Role("ROLE_EMPLOYEE"));
+    private static final List<Role> ROLES = Collections.singletonList(new Role("ROLE_EMPLOYEE"));
 
     @Mock
     UserRepository userRepository;
@@ -49,7 +50,7 @@ class UserServiceTest {
     UserServiceImpl userService;
 
     @Test
-    void findByUserName() {
+    void findByUserNameTest() {
         Optional<User> actualUser = Optional.of(UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD,
                 FIRST_NAME, LAST_NAME,
                 EMAIL,
@@ -63,26 +64,27 @@ class UserServiceTest {
     }
 
     @Test
-    void findByEmail() {
-        Optional<User> actualUser = Optional.of(UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD,
-                FIRST_NAME, LAST_NAME,
-                EMAIL,
-                ROLES));
+    void existsByUserNameTest() {
+        doReturn(true).when(userRepository).existsUserByEmail(USER_NAME);
 
-        doReturn(actualUser).when(userRepository).findByEmail(EMAIL);
+        Assert.assertTrue(userService.existsByEmail(USER_NAME));
 
-        Optional<User> expectedUser = userService.findByEmail(EMAIL);
-
-        assertThat(expectedUser).isEqualTo(actualUser);
     }
 
     @Test
-    void findAll() {
+    void existsByEmailTest() {
+        doReturn(true).when(userRepository).existsUserByEmail(EMAIL);
+
+        Assert.assertTrue(userService.existsByEmail(EMAIL));
+    }
+
+    @Test
+    void findAllTest() {
 
         User user = UserTestUtil.createUserObject(USER_ID, USER_NAME, PASSWORD, FIRST_NAME, LAST_NAME, EMAIL,
                 ROLES);
 
-        List<User> actualUsers = Arrays.asList(user);
+        List<User> actualUsers = Collections.singletonList(user);
 
         doReturn(actualUsers).when(userRepository).findAll();
 
@@ -92,7 +94,7 @@ class UserServiceTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         userService.delete(USER_ID);
 
         verify(userRepository, times(1)).deleteById(USER_ID);
@@ -132,5 +134,4 @@ class UserServiceTest {
         assertEquals(expected.getLastName(), expected.getLastName());
         assertEquals(expected.getEmail(), expected.getEmail());
     }
-
 }

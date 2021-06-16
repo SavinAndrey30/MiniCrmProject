@@ -101,26 +101,18 @@ public class MiniCRMController {
         }
 
         Long id = employee.getId();
-        employeeService.findById(id)
+        return employeeService.findById(id)
                 .map(dbEmployee -> {
                     employee.setPhoto(dbEmployee.getPhoto());
-                    return employee;
+                    employeeService.save(employee);
+                    return "redirect:/crm";
                 })
-                .map(employeeService::save)
-                .map(value -> "redirect:/crm")
                 .orElseThrow(() -> {
                     logger.info("/update: Employee with the id " + id + " is not " +
                             "found");
                     return new EmployeeNotFoundException("Employee with the id " + id + " is not " +
                             "found");
                 });
-
-//        Optional<Employee> dbEmployee = employeeService.findById(employee.getId());
-//        dbEmployee.ifPresent(value -> employee.setPhoto(value.getPhoto()));
-
-        employeeService.save(employee);
-
-        return "redirect:/crm";
     }
 
     @GetMapping("/showEmployeeDetails")

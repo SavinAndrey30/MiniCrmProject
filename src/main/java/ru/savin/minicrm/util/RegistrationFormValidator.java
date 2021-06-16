@@ -3,10 +3,8 @@ package ru.savin.minicrm.util;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import ru.savin.minicrm.dto.FormUser;
-import ru.savin.minicrm.entity.User;
 import ru.savin.minicrm.service.UserService;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 
@@ -25,8 +23,7 @@ public class RegistrationFormValidator {
 
     public static boolean usernameExists(UserService userService, FormUser formUser, Model model) {
         String userName = formUser.getUserName();
-        Optional<User> existingByUsername = userService.findByUserName(userName);
-        if (existingByUsername.isPresent()) {
+        if (userService.existsByUserName(userName)) {
             model.addAttribute("formUser", new FormUser());
             model.addAttribute("registrationError", "User name already exists.");
 
@@ -38,8 +35,8 @@ public class RegistrationFormValidator {
 
     public static boolean emailExists(UserService userService, FormUser formUser, Model model) {
         String email = formUser.getEmail();
-        Optional<User> existingByEmail = userService.findByEmail(email);
-        if (existingByEmail.isPresent()) {
+        if (userService.existsByEmail(email)) {
+            model.addAttribute("formUser", new FormUser());
             model.addAttribute("registrationErrorEmail", "User with the email " + email + " already " +
                     "exists.");
 

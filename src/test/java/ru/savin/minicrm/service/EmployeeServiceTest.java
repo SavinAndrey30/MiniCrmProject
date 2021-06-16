@@ -37,7 +37,7 @@ class EmployeeServiceTest {
     private EmployeeServiceImpl employeeService;
 
     @Test
-    public void findAll() {
+    public void findAllTest() {
         Employee employee = createEmployeeObject(EMPLOYEE_ID, EMPLOYEE_FIRST_NAME, EMPLOYEE_LAST_NAME,
                 EMPLOYEE_EMAIL, EMPLOYEE_PHOTO);
 
@@ -51,19 +51,19 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void findById() {
-        Employee actualEmployee = createEmployeeObject(EMPLOYEE_ID, EMPLOYEE_FIRST_NAME, EMPLOYEE_LAST_NAME,
-                EMPLOYEE_EMAIL, EMPLOYEE_PHOTO);
+    public void findByIdTest() {
+        Optional<Employee> actualEmployee = Optional.of(createEmployeeObject(EMPLOYEE_ID, EMPLOYEE_FIRST_NAME, EMPLOYEE_LAST_NAME,
+                EMPLOYEE_EMAIL, EMPLOYEE_PHOTO));
 
-        doReturn(Optional.of(actualEmployee)).when(employeeRepository).findById(EMPLOYEE_ID);
+        doReturn(actualEmployee).when(employeeRepository).findById(EMPLOYEE_ID);
 
-        Employee expectedEmployee = employeeService.findById(EMPLOYEE_ID).get();
+        Optional<Employee> expectedEmployee = employeeService.findById(EMPLOYEE_ID);
 
         assertThat(expectedEmployee).isEqualTo(actualEmployee);
     }
 
     @Test
-    void save() {
+    void saveTest() {
         Employee employee = createEmployeeObject(EMPLOYEE_ID, EMPLOYEE_FIRST_NAME, EMPLOYEE_LAST_NAME,
                 EMPLOYEE_EMAIL, EMPLOYEE_PHOTO);
 
@@ -77,7 +77,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         Employee employeeToDelete = createEmployeeObject(EMPLOYEE_ID, EMPLOYEE_FIRST_NAME, EMPLOYEE_LAST_NAME,
                 EMPLOYEE_EMAIL, EMPLOYEE_PHOTO);
 
@@ -89,7 +89,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void deleteWhenEmployeeIsNotFound() {
+    void deleteWhenEmployeeIsNotFoundTest() {
         doReturn(Optional.empty()).when(employeeRepository).findById(EMPLOYEE_ID);
 
         assertThrows(EmployeeNotFoundException.class, () -> {
@@ -102,7 +102,7 @@ class EmployeeServiceTest {
 
 
     @Test
-    void searchBy() {
+    void searchByTest() {
         employeeService.searchBy(NAME_FOR_SEARCH);
 
         verify(employeeRepository, times(1)).findByFirstNameContainsOrLastNameContainsAllIgnoreCase(NAME_FOR_SEARCH,
