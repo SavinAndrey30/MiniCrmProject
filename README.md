@@ -39,5 +39,3 @@ Employee: andrey (пароль pass123)
 ## Так выглядит приложение
 
 ![alt text](crm-screenshot.png "crm-screenshot")
-=======
->>>>>>> d947d5c85bd364f26ed1973e70395f0072a9fbfe
