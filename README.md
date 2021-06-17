@@ -28,7 +28,7 @@ Spring Boot, Spring Data JPA, Spring Security, JUnit, Postgresql (Docker image),
 
 Приложение будет доступно по адресу ``` http://localhost:8888 ```
 
-- Данные для входа: 
+- Данные для входа:  
 Admin: alena (пароль pass123)  
 Manager: boris (пароль pass123)  
 Employee: andrey (пароль pass123)
